@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('images/pexels-soumia-photography-131641539-14854040.jpg'); /* Replace with your image URL */
+            background-size: cover; /* Cover entire screen */
+            background-position: center; /* Center the background */
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Login Form</h2>
+        <form id="userform" action="/submit_login" method="POST">
+            <label for="email">Email:</label>
+            <input type="email" id="email_address" name="email_address" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <input type="submit" value="Login">
+        </form>
+    </div>
+<script>
+    // javascript handles form submission
+    document.getElementById('userform').addEventListener('submit',async function (event){
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        //send a POST request to the server
+        const response = await fetch('/users',{
+            method : 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body : JSON.stringify({name, email})
+        });
+        const data = await response.json();
+        console.log('new user created',data);
+        res.sendFile(path.join(__dirname,'index.html'));
+    });
+    
+</script>
+</body>
+</html>

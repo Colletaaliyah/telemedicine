@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Registration</title>
+    <style>
+        .form-container form {
+            overflow: hidden;
+            /* Prevent scroll in form */
+            height: auto;
+            /* Adjust form height automatically */
+
+        }
+        form .text-content p{
+            justify-content: center;
+        }
+        form {
+            overflow: hidden;
+            
+        }
+
+        h2 {
+            margin-top: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: -2px;
+            display: block;
+
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"],
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 400px) {
+            .form-container {
+                padding: 15px;
+                height: auto;
+                overflow: auto;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #confirmButton {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #confirmButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        <form id="myForm" method="POST">
+            <label for="username">Name:</label>
+            <input type="text" id="username" name="name" required>
+
+            <!-- <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required min="18" max="100"> -->
+            <!-- <div style="display: flex; gap: 10px;">
+                <label for="female">Female</label>
+                <input type="radio" id="female" name="gender" value="female">
+
+                <label for="male">Male</label>
+                <input type="radio" id="male" name="gender" value="male">
+            </div> -->
+
+            <!-- <label for="contact-method">Preferred Contact Method:</label>
+            <input type="radio" id="contact-email" name="preferredContact" value="email">
+            <label for="contact-email">Email</label>
+
+            <input type="radio" id="contact-phone" name="preferredContact" value="phone">
+            <label for="contact-phone">Phone</label> -->
+
+            <label for="email_address">Email Address:</label>
+            <input type="email" id="email_address" name="email_address" placeholder="Enter your email" required>
+
+            <!-- <label for="phone_number">Tel No:</label>
+            <input type="tel" id="phone_number" name="phone_number" placeholder="Enter your phone number"> -->
+
+            <!-- <label for="country">Country:</label>
+            <select id="country" name="country" required>
+                <option value="Kenya">Kenya</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Tanzania">Tanzania</option>
+                <option value="Uganda">Uganda</option>
+                <option value="South Africa">South Africa</option>
+            </select> -->
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <label>
+                <input type="checkbox" name="terms" id="terms" required>
+                I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a>
+            </label>
+
+            <button type="submit">Submit</button>
+        </form>
+        <div class="text-center">
+            <p><h4>A member? <a href="/login">Login</a></h4></p>
+        </div>
+    </div>
+
+    <!-- Modal for displaying summary -->
+    <div id="summaryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h3>Form Summary</h3>
+            <div id="summaryData"></div>
+            <button id="confirmButton">Confirm and Go to Login</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('myForm').addEventListener('submit', async function (event) {
+            //event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('username').value;
+            const email_address = document.getElementById('email_address').value;
+
+
+            // send a post request to the server
+            const response = await fetch('/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email_address })
+            });
+            const data = await response.json();
+            console.log('new user created:', data);
+            // Check if the terms and conditions checkbox is checked
+            const termsAccepted = document.getElementById('terms').checked;
+            if (!termsAccepted) {
+                alert('Please accept the terms and conditions before submitting.');
+                return; // Prevent form submission if terms are not accepted
+            }
+
+            // Validate passwords
+            if (!validatePasswords()) {
+                return; // Stop if password validation fails
+            }
+
+            // Check if gender is selected
+            const genderSelected = document.querySelector('input[name="gender"]:checked');
+            if (!genderSelected) {
+                alert('Please select a gender.');
+                return; // Prevent form submission if gender is not selected
+            }
+
+            // Check if preferred contact method is selected
+            const contactMethodSelected = document.querySelector('input[name="preferredContact"]:checked');
+            if (!contactMethodSelected) {
+                alert('Please select a preferred contact method.');
+                return; // Prevent form submission if preferred contact is not selected
+            }
+
+            // Create an object to store the form data
+            const formData = {};
+            const inputs = document.querySelectorAll('#myForm input, #myForm select');
+
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    formData[input.name] = input.checked;
+                } else if (input.type === 'radio') {
+                    if (input.checked) {
+                        formData[input.name] = input.value;
+                    }
+                } else {
+                    formData[input.name] = input.value;
+                }
+            });
+
+            // Email validation
+            const email = formData.email_address;
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address.');
+                return; // Stop form submission if the email is invalid
+            }
+
+            // Phone number validation
+            const phone = formData.phone_number;
+            if (phone && !validatePhoneNumber(phone)) {
+                alert('Please enter a valid phone number.');
+                return; // Stop form submission if the phone number is invalid
+            }
+
+            // Log the form data to the console
+            console.log('Form Data:', formData);
+
+            // Show the modal with the summary
+            showModal(formData);
+        });
+
+        // Function to display the modal with form data
+        function showModal(formData) {
+            const summaryDiv = document.getElementById('summaryData');
+            summaryDiv.innerHTML = `
+                <p><strong>Name:</strong> ${formData.username}</p>
+                <p><strong>Age:</strong> ${formData.age}</p>
+                <p><strong>Gender:</strong> ${formData.gender}</p>
+                <p><strong>Preferred Contact Method:</strong> ${formData.preferredContact}</p>
+                <p><strong>Email:</strong> ${formData.email_address}</p>
+                <p><strong>Phone Number:</strong> ${formData.phone_number || 'N/A'}</p>
+                <p><strong>Country:</strong> ${formData.country}</p>
+                <p><strong>Password:</strong> ${formData.password.replace(/./g, '*')}</p>
+            `;
+            document.getElementById('summaryModal').style.display = 'block';
+        }
+
+        // Function to hide the modal
+        document.getElementById('closeModal').onclick = function () {
+            document.getElementById('summaryModal').style.display = 'none';
+        };
+
+        // Function to validate passwords
+        function validatePasswords() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return false;
+            }
+            return true;
+        }
+
+        // Function to validate email
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        // Function to validate phone number
+        function validatePhoneNumber(phone) {
+            const regex = /^[0-9]{10,15}$/; // Adjust the regex based on the expected phone number format
+            return regex.test(phone);
+        }
+
+        // Confirm button click event
+        document.getElementById('confirmButton').onclick = function () {
+            alert('Registration successful! Redirecting to login...');
+            window.location.href = 'login.html'; // Redirect to the login page
+        };
+
+        // Close modal when clicking anywhere outside of it
+        window.onclick = function (event) {
+            const modal = document.getElementById('summaryModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+   
+</html>
