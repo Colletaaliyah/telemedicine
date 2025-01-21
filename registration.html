@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>Registration</title>
     <style>
         .form-container form {
@@ -14,12 +14,14 @@
             /* Adjust form height automatically */
 
         }
-        form .text-content p{
+
+        form .text-content p {
             justify-content: center;
         }
+
         form {
             overflow: hidden;
-            
+
         }
 
         h2 {
@@ -130,19 +132,19 @@
 <body>
     <div class="form-container">
         <h2>Registration Form</h2>
-        <form id="myForm" method="POST">
+        <form id="myForm" action='/registration.html' method="POST">
             <label for="username">Name:</label>
             <input type="text" id="username" name="name" required>
 
-            <!-- <label for="age">Age:</label>
-            <input type="number" id="age" name="age" required min="18" max="100"> -->
-            <!-- <div style="display: flex; gap: 10px;">
+             <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required min="18" max="100"> 
+            <div style="display: flex; gap: 10px;">
                 <label for="female">Female</label>
                 <input type="radio" id="female" name="gender" value="female">
 
                 <label for="male">Male</label>
                 <input type="radio" id="male" name="gender" value="male">
-            </div> -->
+            </div> 
 
             <!-- <label for="contact-method">Preferred Contact Method:</label>
             <input type="radio" id="contact-email" name="preferredContact" value="email">
@@ -154,17 +156,17 @@
             <label for="email_address">Email Address:</label>
             <input type="email" id="email_address" name="email_address" placeholder="Enter your email" required>
 
-            <!-- <label for="phone_number">Tel No:</label>
-            <input type="tel" id="phone_number" name="phone_number" placeholder="Enter your phone number"> -->
+            <label for="phone_number">Tel No:</label>
+            <input type="tel" id="phone_number" name="phone_number" placeholder="Enter your phone number"> 
 
-            <!-- <label for="country">Country:</label>
+            <label for="country">Country:</label>
             <select id="country" name="country" required>
                 <option value="Kenya">Kenya</option>
                 <option value="Nigeria">Nigeria</option>
                 <option value="Tanzania">Tanzania</option>
                 <option value="Uganda">Uganda</option>
                 <option value="South Africa">South Africa</option>
-            </select> -->
+            </select> 
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
@@ -180,7 +182,9 @@
             <button type="submit">Submit</button>
         </form>
         <div class="text-center">
-            <p><h4>A member? <a href="/login">Login</a></h4></p>
+            <p>
+            <h4>A member? <a href="/login">Login</a></h4>
+            </p>
         </div>
     </div>
 
@@ -334,5 +338,6 @@
             }
         };
     </script>
-   
+</body>
+
 </html>

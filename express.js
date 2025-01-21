@@ -5,6 +5,7 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
+const PORT = process.env.PORT || 3000;
 require('dotenv').config({ path: './routes/.env' });
 
 
@@ -37,6 +38,10 @@ db.connect((err) => {
 app.get('/register', (request, response) => {
     response.sendFile(path.join(__dirname, 'index.html'));
 });
+app.get('/registration.html', (req, res) => {
+    res.sendFile(__dirname + '/registration.html');
+});
+
 app.get('/login', (request, response) => {
     response.sendFile(path.join(__dirname, 'login.html'));
 });
@@ -63,6 +68,14 @@ app.get('/users', (req, res) => {
         }
         res.json(results);
     });
+});
+
+
+// POST route to handle the form submission
+app.post('/registration.html', (req, res) => {
+    const formData = req.body; // Retrieve form data
+    console.log(formData); // Debug: Print form data
+    res.send('Registration successful');
 });
 
 app.post('/users',(req,res)=>{
@@ -94,9 +107,11 @@ app.post('/submit-form', (req, res) => {
     
 });
 
+
+app.get("*",(req,res) => res.sendFile(path.join(__dirname,'index.html')))
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
 });
 
-module.exports = connection;
+module.exports = db;
