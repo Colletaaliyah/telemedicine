@@ -38,7 +38,7 @@ db.connect((err) => {
 app.get('/register', (request, response) => {
     response.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/registration.html', (req, res) => {
+app.get('/registration', (req, res) => {
     res.sendFile(__dirname + '/registration.html');
 });
 
@@ -72,7 +72,7 @@ app.get('/users', (req, res) => {
 
 
 // POST route to handle the form submission
-app.post('/registration.html', (req, res) => {
+app.post('/registration', (req, res) => {
     const formData = req.body; // Retrieve form data
     console.log(formData); // Debug: Print form data
     res.send('Registration successful');
@@ -105,6 +105,29 @@ app.post('/submit-form', (req, res) => {
         res.json({ success: 'Data inserted successfully', result });
     });
     
+});
+
+
+
+app.post('/submit_login', (req, res) => {
+    const { email_address, password } = req.body;
+
+    // Check if user exists in the database
+    const query = 'SELECT * FROM users WHERE email_address = ? AND password = ?';
+    db.query(query, [email_address, password], (err, results) => {
+        if (err) {
+            console.error('Error during login:', err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length > 0) {
+            // User exists, login successful
+            res.status(200).json({ message: 'Login successful', user: results[0] });
+        } else {
+            // User does not exist or wrong credentials
+            res.status(401).json({ error: 'Invalid email or password' });
+        }
+    });
 });
 
 
